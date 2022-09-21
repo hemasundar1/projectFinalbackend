@@ -1,4 +1,4 @@
-package com.example.project.Util;
+package com.example.project.util;
 
 import java.util.Date;
 import java.util.HashMap;

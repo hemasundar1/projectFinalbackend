@@ -42,17 +42,17 @@ public class UserModel {
 	
 	@OneToOne(mappedBy= "userModel" , fetch = FetchType.EAGER , orphanRemoval = true)
 	@JsonIgnore
-	private ApplicationDetails application_details;
+	private ApplicationDetails applicationdetails;
 	
 
 
 
-	public ApplicationDetails getApplication_details() {
-		return application_details;
+	public ApplicationDetails getApplicationdetails() {
+		return applicationdetails;
 	}
 
-	public void setApplication_details(ApplicationDetails application_details) {
-		this.application_details = application_details;
+	public void setApplicationdetails(ApplicationDetails applicationdetails) {
+		this.applicationdetails = applicationdetails;
 	}
 
 	public int getUserId() {
@@ -117,7 +117,7 @@ public class UserModel {
 
 	public UserModel() {
 		super();
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public UserModel( String userRole, String email, String userName, String mobileNumber, String password,

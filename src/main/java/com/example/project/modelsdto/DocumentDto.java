@@ -1,14 +1,13 @@
-package com.example.project.modelsDto;
-
+package com.example.project.modelsdto;
 
 public class DocumentDto {
 	
-
 	private String adharNum;
 	private String accountNum;
 	private String ifscNum;
 	private String branch;
 	private String rollNum;
+	
 	public String getAdharNum() {
 		return adharNum;
 	}
@@ -48,8 +47,6 @@ public class DocumentDto {
 		this.rollNum = rollNum;
 	}
 	public DocumentDto() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public String toString() {

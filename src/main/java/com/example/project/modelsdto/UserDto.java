@@ -1,28 +1,35 @@
-package com.example.project.modelsDto;
+package com.example.project.modelsdto;
 
 public class UserDto {
+	private int userId;
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 	private String userRole;
 	private String email;
 	private String userName;
 	private String mobileNumber;
 	private String password;
-	private String confirmPassword;
-	
-	
 	
 	public UserDto() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
-	public UserDto(String userRole, String email, String userName, String mobileNumber, String password,
-			String confirmPassword) {
+	
+	public UserDto(String userRole, String email, String userName, String mobileNumber, String password) {
 		super();
 		this.userRole = userRole;
 		this.email = email;
 		this.userName = userName;
 		this.mobileNumber = mobileNumber;
 		this.password = password;
-		this.confirmPassword = confirmPassword;
 	}
 	public String getUserRole() {
 		return userRole;
@@ -39,9 +46,6 @@ public class UserDto {
 	public String getUserName() {
 		return userName;
 	}
-	public void setUsername(String userName) {
-		this.userName = userName;
-	}
 	public String getMobileNumber() {
 		return mobileNumber;
 	}
@@ -54,13 +58,4 @@ public class UserDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getConfirmPassword() {
-		return confirmPassword;
-	}
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
-	}
-	
-	
-
 }

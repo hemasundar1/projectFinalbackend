@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.project.models.ApplicationDetails;
 import com.example.project.models.DocumentDetails;
-import com.example.project.modelsDto.DocumentDto;
+import com.example.project.modelsdto.DocumentDto;
 import com.example.project.repository.DocumentRepository;
 
 @Service
@@ -20,52 +20,35 @@ public class DocumentService {
 	
 	public List<DocumentDetails> getAlldocuments()
 	{
-		return (List<DocumentDetails>)docRepo.findAll();
+		return docRepo.findAll();
 	}
 	
-	/*public DocumentDetails getdocumentByappId(int appId)
-	{
-		Application_details app=new Application_details();
-		
-		return docRepo.findByappId(appId);
-	}*/
 	
 	public DocumentDetails getdocumentsById(Integer id)
 	{
-		return docRepo.findById(id).get();
+		return docRepo.findByid(id);
 	}
 	
 	public Optional<DocumentDetails> getDet( int id){
 		return docRepo.findById(id);
 	}
 	
-	public String postDet(DocumentDto docDet,int appId) {
+	public void postDet(DocumentDto docDet,int appId) {
 		
 		DocumentDetails doc = new DocumentDetails(docDet.getAdharNum(),docDet.getAccountNum(),docDet.getIfscNum(),docDet.getBranch(),docDet.getRollNum());
-		doc.setApplication_details(new ApplicationDetails(appId));
-		if(docRepo.save(doc)!=null){
-		  return "Successfully added document details";	
-		}
-		else {
-			return  "Not, added Successfully";
-		}
+		doc.setApplicationdetails(new ApplicationDetails(appId));
+		docRepo.save(doc);
 	}
 	
-	public String putDet(  DocumentDetails docDetails , int id) {
+	public void putDet(  DocumentDetails docDetails , int id) {
 		
-		Optional<DocumentDetails> docDet = docRepo.findById(id);
-		DocumentDetails result = docDet.get();
+	 DocumentDetails result = docRepo.findByid(id);
 		result.setAccountNum(docDetails.getAccountNum());
 		result.setAdharNum(docDetails.getAdharNum());
 		result.setBranch(docDetails.getBranch());
 		result.setIfscNum(docDetails.getIfscNum());
 		result.setRollNum(docDetails.getRollNum());
-		if(docRepo.save(result) !=null) {
-			return "Updated Successfully";
-		}
-		else {
-			return  "Not Updated, something went wrong";
-		}
+		docRepo.save(result);
 	}
 	
 	public String deleteDet(int id) {

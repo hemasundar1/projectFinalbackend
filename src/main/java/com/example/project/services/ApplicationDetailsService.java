@@ -1,5 +1,6 @@
 package com.example.project.services;
 
+import org.apache.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -8,95 +9,89 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
+
 
 import javax.servlet.http.HttpServletResponse;
 
 import com.example.project.models.ApplicationDetails;
 import com.example.project.models.UserModel;
-import com.example.project.modelsDto.DocDto;
+import com.example.project.modelsdto.DocDto;
 import com.example.project.repository.ApplicationDetailsRepository;
 
+@javax.annotation.ParametersAreNonnullByDefault
 @Service
 public class ApplicationDetailsService {
+	private static org.apache.log4j.Logger log = Logger.getLogger(ApplicationDetailsService.class); 
 
 	@Autowired
 	ApplicationDetailsRepository appRepo;
 	
 	public List<ApplicationDetails> getAllRequests()
 	{
-		return (List<ApplicationDetails>)appRepo.findAll();
+		return appRepo.findAll();
 	}
 
 	public ApplicationDetails getAppDetailsById(Integer id) {
-		return appRepo.findById(id).get();
+		return appRepo.findByAppId(id);
+	}
+	
+	public ApplicationDetails getByName(String name)
+	{
+		return appRepo.findByName(name);
 	}
 	
 	public void updateApp(ApplicationDetails appUpdate)
 	{
 		Integer id=appUpdate.getAppId();
-		ApplicationDetails appupdate=appRepo.findById(id).get();
-		appupdate.setFirstName(appUpdate.getFirstName());
-		appupdate.setLastName(appUpdate.getLastName());
+		ApplicationDetails appupdate=appRepo.findByAppId(id);
+		appupdate.setName(appUpdate.getName());
 		appupdate.setClassName(appUpdate.getClassName());
 		appupdate.setCollegeName(appUpdate.getCollegeName());
 		appupdate.setPostalAddress(appUpdate.getPostalAddress());
 		appupdate.setState(appUpdate.getState());
-		appRepo.save(appUpdate);
+		appRepo.save(appupdate);
 	}
 	
 	public void requestApprove(Integer id,ApplicationDetails appDetails)
 	{
-		ApplicationDetails appdetails=appRepo.findById(id).get();
+		ApplicationDetails appdetails=appRepo.findByAppId(id);
+		appdetails.setStatus(appDetails.getStatus());
 		appdetails.setStatus("approved");
 		appRepo.save(appdetails);
 	}
 	
 	public void requestReject(Integer id,ApplicationDetails appDetails)
 	{
-		ApplicationDetails appdetails=appRepo.findById(id).get();
+		ApplicationDetails appdetails=appRepo.findByAppId(id);
+		appdetails.setStatus(appDetails.getStatus());
 		appdetails.setStatus("rejected");
 		appRepo.save(appdetails);
 	}
 	
 	public void assigned(Integer appId,ApplicationDetails appDetails)
 	{
-		ApplicationDetails appdetails=appRepo.findById(appId).get();
+		ApplicationDetails appdetails=appRepo.findByAppId(appId);
 		appdetails.setAssigned(appDetails.getAssigned());
 		appRepo.save(appdetails);
 	}
 	
 	
-	public int postAppDetails(ApplicationDetails app) {
+	public void postAppDetails(ApplicationDetails app) {
 		
-		if(appRepo.save(app)!=null) {
-			return app.getAppId() ;
-		}
-		else {
-			return 0;
-		}
+			appRepo.save(app);
+		
+
 	}
 	
-	public String putAppDetails(ApplicationDetails app, int id) {
-		Optional<ApplicationDetails> result = appRepo.findById(id);
-		ApplicationDetails appDetails = result.get();
+	public void putAppDetails(ApplicationDetails app, int id) {
+		ApplicationDetails appDetails = appRepo.findByAppId(id);
 		appDetails.setClassName(app.getClassName());
 		appDetails.setCollegeName(app.getCollegeName());
-		appDetails.setFirstName(app.getFirstName());
-		appDetails.setLastName(app.getLastName());
+		appDetails.setName(app.getName());
 		
 		appDetails.setPostalAddress(app.getPostalAddress());
 		appDetails.setState(app.getState());
-		
-		
-		
-		if(appRepo.save(appDetails) !=null) {
-			
-			 return "Successfully updated";
-		}
-		else {
-			return "Not updated successfully";
-		}
+		appRepo.save(appDetails);
 	}
 	
 	public String deleteAppDetails(int id) {
@@ -111,22 +106,24 @@ public class ApplicationDetailsService {
 		}
 		
 	}
-	
-	public int uploadFile(MultipartFile multipartFile, String firstName,String lastName,String postalAddress,String collegeName, String state, String className,int studentId) throws IOException {
-		String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-
+	@javax.annotation.CheckForNull
+	public Integer uploadFile(MultipartFile multipartFile, String name,String postalAddress,String collegeName, String state, String className,int studentId) throws IOException {
+		
+		String fileName;
+		fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 		String url = ServletUriComponentsBuilder.fromCurrentContextPath()
 				.path("/downloadFromDB")
 				.path(fileName)
 				.toUriString();
 		
-		ApplicationDetails appDetails = new ApplicationDetails(fileName, firstName, lastName, postalAddress, collegeName, state,className, url,multipartFile.getBytes());
+		ApplicationDetails appDetails = new ApplicationDetails(fileName,name, collegeName, state,className, url,multipartFile.getBytes());
+		appDetails.setPostalAddress(postalAddress);
 		appDetails.setUserModel(new UserModel(studentId));
 		appDetails.setDocumentType("JPEG");
 		appRepo.save(appDetails);
 		
 		
-		String contentType = multipartFile.getContentType();
+	
 
 		return appDetails.getAppId();
 	}
@@ -136,7 +133,7 @@ public class ApplicationDetailsService {
 		ApplicationDetails doc =  appRepo.findByAppId(appId);
 
 		request.setHeader("Content-Disposition", "attachment; filename=" + doc.getImage());
-		System.out.println("uploadfile working");
+		log.info("uploadfile working");
 		return doc.getDocument();			
 	}
 	public DocDto fileType(int appId) {
@@ -144,7 +141,7 @@ public class ApplicationDetailsService {
 		DocDto documentDto = new DocDto();
 	     documentDto.setDocumentType(doc.getDocumentType());
 		documentDto.setImage(doc.getImage());
-		System.out.println("fileType");
+		log.info("fileType");
 		return documentDto;
 
 	}

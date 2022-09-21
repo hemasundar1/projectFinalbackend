@@ -8,7 +8,5 @@ import com.example.project.models.DocumentDetails;
 
 @Repository
 public interface DocumentRepository extends JpaRepository<DocumentDetails, Integer> {
-	//public DocumentDetails findByapplication_details(Integer application_details);
-	//public DocumentDetails findByappId(int appId);
-
+	public DocumentDetails findByid(Integer id);
 }

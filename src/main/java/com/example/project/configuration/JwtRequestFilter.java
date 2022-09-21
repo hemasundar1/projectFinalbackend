@@ -1,5 +1,6 @@
 package com.example.project.configuration;
 
+import org.apache.log4j.*;
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
@@ -15,13 +16,14 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.example.project.Util.JwtUtil;
 import com.example.project.services.JwtService;
+import com.example.project.util.JwtUtil;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
+	private static org.apache.log4j.Logger log = Logger.getLogger(JwtRequestFilter.class);
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -42,19 +44,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 username = jwtUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT Token");
+               log.info("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
+              log.info("JWT Token has expired");
             }
         } else {
-            System.out.println("JWT token does not start with Bearer");
+          log.info("JWT token does not start with Bearer");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = jwtService.loadUserByUsername(username);
 
-            if (jwtUtil.validateToken(jwtToken, userDetails)) {
+            if (Boolean.TRUE.equals(jwtUtil.validateToken(jwtToken, userDetails))) {
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

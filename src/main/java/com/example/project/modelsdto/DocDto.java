@@ -1,4 +1,4 @@
-package com.example.project.modelsDto;
+package com.example.project.modelsdto;
 
 public class DocDto {
 	

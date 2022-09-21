@@ -1,7 +1,5 @@
 package com.example.project.models;
 
-import java.util.Arrays;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -26,8 +24,7 @@ public class ApplicationDetails {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private int appId;
 	private String image;
-	private String firstName;
-	private String lastName;
+	private String name;
 	private String postalAddress;
 	private String collegeName;
 	private String state;
@@ -43,14 +40,13 @@ public class ApplicationDetails {
 	
 	
 	
-	@OneToOne(mappedBy= "application_details" , fetch = FetchType.EAGER , orphanRemoval = true)
+	@OneToOne(mappedBy= "applicationDetails" , fetch = FetchType.EAGER , orphanRemoval = true)
 	@JsonIgnore
 	private DocumentDetails documentDetails;
 	
 	
 	
 	@OneToOne(fetch= FetchType.EAGER, optional = false)
-	//@JsonIgnore
 	@JoinColumn(name="studentId", referencedColumnName = "userId")
 	private UserModel userModel;
 	
@@ -91,20 +87,12 @@ public class ApplicationDetails {
 		this.appId = appId;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getPostalAddress() {
@@ -180,15 +168,13 @@ public class ApplicationDetails {
 		this.documentType = documentType;
 	}
 
-	public ApplicationDetails( String image, String firstName, String lastName, String postalAddress,
+	public ApplicationDetails( String image,String name, 
 			String collegeName, String state, String className,  String url,
 			byte[] document) {
 		super();
 		
 		this.image = image;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.postalAddress = postalAddress;
+		this.name=name;
 		this.collegeName = collegeName;
 		this.state = state;
 		this.className = className;
@@ -196,14 +182,8 @@ public class ApplicationDetails {
 		this.document = document;
 		
 	}
-
-	public ApplicationDetails() {
+	public ApplicationDetails()
+	{
 		super();
-		// TODO Auto-generated constructor stub
 	}
-
-
-
-
-	
 }

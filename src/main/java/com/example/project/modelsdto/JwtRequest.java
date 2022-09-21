@@ -1,4 +1,4 @@
-package com.example.project.modelsDto;
+package com.example.project.modelsdto;
 
 public class JwtRequest {
 
@@ -24,8 +24,7 @@ public class JwtRequest {
 		this.password = password;
 	}
 	public JwtRequest() {
-		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	

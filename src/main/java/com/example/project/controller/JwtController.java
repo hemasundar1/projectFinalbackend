@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import org.apache.log4j.*;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project.models.UserModel;
-import com.example.project.modelsDto.JwtRequest;
-import com.example.project.modelsDto.JwtResponse;
+import com.example.project.modelsdto.JwtRequest;
+import com.example.project.modelsdto.JwtResponse;
 import com.example.project.services.JwtService;
 import com.example.project.services.*;
 
@@ -22,6 +23,7 @@ import com.example.project.services.*;
 
 
 public class JwtController {
+	private static org.apache.log4j.Logger log=Logger.getLogger(JwtController.class);
 
     @Autowired
     private JwtService jwtService;
@@ -30,15 +32,14 @@ public class JwtController {
     private UserService userservice;
 
     @PostMapping({"/authenticate"})
-    public JwtResponse createJwtToken(@RequestBody JwtRequest jwtRequest) throws Exception {
-    	System.out.println("Enytered");
+    public JwtResponse createJwtToken(@RequestBody JwtRequest jwtRequest) {
+    	log.info("Enytered");
         return jwtService.createJwtToken(jwtRequest);
     }
     
     @GetMapping("/current-employee")
     public UserModel getCurrentEmployee(Principal principal)
     {
-    	System.out.println(principal.getName());
-    	return ((UserModel)this.userservice.getUserByuserName(principal.getName()));
+    	return (this.userservice.getUserByuserName(principal.getName()));
     }
 }

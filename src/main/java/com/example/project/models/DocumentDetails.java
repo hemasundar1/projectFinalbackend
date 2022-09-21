@@ -7,17 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
-
-import com.example.project.models.ApplicationDetails;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
 @Entity
-
 @CrossOrigin(origins = "http://localhost:4200")
 public class DocumentDetails {
 	
@@ -32,9 +26,8 @@ public class DocumentDetails {
 	
 	
 	@OneToOne(fetch= FetchType.EAGER)
-	//@JsonIgnore
 	@JoinColumn(name="applicationId", referencedColumnName = "appId")
-	private ApplicationDetails application_details;
+	private ApplicationDetails applicationDetails;
 	
 	public DocumentDetails(String adharNum, String accountNum, String ifscNum, String branch,String rollNum) {
 		super();
@@ -43,12 +36,11 @@ public class DocumentDetails {
 		this.ifscNum = ifscNum;
 		this.branch = branch;
 		this.rollNum=rollNum;
-
 	}
+	
 	public int getId() {
 		return id;
 	}
-
 
 
 	public void setId(int id) {
@@ -117,20 +109,9 @@ public class DocumentDetails {
 
 
 
-	public ApplicationDetails getApplication_details() {
-		return application_details;
-	}
-
-
-
-	public void setApplication_details(ApplicationDetails application_details) {
-		this.application_details = application_details;
-	}
-
-
 
 	public DocumentDetails(int id, String adharNum, String accountNum, String ifscNum, String branch, String rollNum,
-			ApplicationDetails application_details) {
+			ApplicationDetails applicationDetails) {
 		super();
 		this.id = id;
 		this.adharNum = adharNum;
@@ -138,12 +119,18 @@ public class DocumentDetails {
 		this.ifscNum = ifscNum;
 		this.branch = branch;
 		this.rollNum = rollNum;
-		this.application_details = application_details;
+		this.applicationDetails = applicationDetails;
 	}
 
 	public DocumentDetails() {
 		super();
-		// TODO Auto-generated constructor stub
+		
+	}
+	public ApplicationDetails getApplicationDetails() {
+		return applicationDetails;
+	}
+	public void setApplicationdetails(ApplicationDetails applicationDetails) {
+		this.applicationDetails = applicationDetails;
 	}
 	
 	

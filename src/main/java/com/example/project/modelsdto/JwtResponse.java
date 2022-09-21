@@ -1,4 +1,4 @@
-package com.example.project.modelsDto;
+package com.example.project.modelsdto;
 
 import com.example.project.models.UserModel;
 
@@ -25,8 +25,7 @@ public class JwtResponse {
 		this.jwtToken = jwtToken;
 	}
 	public JwtResponse() {
-		super();
-		// TODO Auto-generated constructor stub
+		
 	}
     
     

@@ -1,4 +1,4 @@
-package com.example.project.modelsDto;
+package com.example.project.modelsdto;
 
 public class SignUpResponse {
 
@@ -9,7 +9,7 @@ public class SignUpResponse {
 	
 	public SignUpResponse() {
 		super();
-		// TODO Auto-generated constructor stub
+
 	}
 	public SignUpResponse(String status, String message) {
 		super();
